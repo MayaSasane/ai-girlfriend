@@ -1,0 +1,244 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* AI Girlfriend App Design System - Luxurious Romance Theme */
+
+@layer base {
+  :root {
+    /* Base colors - Deep romantic theme */
+    --background: 0 0% 8%;
+    --foreground: 0 0% 95%;
+
+    /* Card system */
+    --card: 0 0% 12%;
+    --card-foreground: 0 0% 95%;
+
+    /* Popover system */
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
+
+    /* Primary - Passionate red */
+    --primary: 0 75% 60%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 0 100% 70%;
+
+    /* Secondary - Elegant gold */
+    --secondary: 45 85% 65%;
+    --secondary-foreground: 0 0% 10%;
+
+    /* Muted tones */
+    --muted: 0 0% 20%;
+    --muted-foreground: 0 0% 70%;
+
+    /* Accent - Deep crimson */
+    --accent: 0 65% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Destructive */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders and inputs */
+    --border: 0 0% 25%;
+    --input: 0 0% 18%;
+    --ring: 0 75% 60%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(0 75% 60%), hsl(0 100% 70%));
+    --gradient-secondary: linear-gradient(135deg, hsl(45 85% 65%), hsl(35 90% 70%));
+    --gradient-empire: linear-gradient(180deg, hsl(0 0% 5%), hsl(0 20% 15%));
+    --gradient-gate: linear-gradient(90deg, hsl(0 50% 20%), hsl(0 70% 30%));
+
+    /* Shadows and glows */
+    --shadow-romantic: 0 10px 40px -10px hsl(0 75% 60% / 0.4);
+    --shadow-gate: 0 0 60px hsl(0 100% 70% / 0.3);
+    --glow-avatar: 0 0 30px hsl(0 75% 60% / 0.5);
+
+    /* Animations */
+    --transition-romantic: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-gate: all 1.2s cubic-bezier(0.23, 1, 0.32, 1);
+    --transition-heavenly: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    
+    /* Heavenly Effects */
+    --glow-heavenly: 0 0 60px hsl(var(--primary) / 0.4), 0 0 120px hsl(var(--primary-glow) / 0.2);
+    --shadow-divine: 0 20px 60px -10px hsl(var(--primary) / 0.3), 0 0 40px hsl(var(--primary-glow) / 0.2);
+    --gradient-heavenly: radial-gradient(circle at 50% 50%, hsl(var(--primary) / 0.15) 0%, transparent 70%);
+    --gradient-divine: linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--secondary) / 0.1), hsl(var(--accent) / 0.1));
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground overflow-x-hidden;
+  }
+}
+
+@layer components {
+  /* Gate Animation - Enhanced */
+  .gate-container {
+    position: relative;
+    background: var(--gradient-divine);
+  }
+  
+  .gate-left {
+    transform: translateX(0);
+    transition: var(--transition-gate);
+  }
+  
+  .gate-right {
+    transform: translateX(0);
+    transition: var(--transition-gate);
+  }
+  
+  .gate-open .gate-left {
+    transform: translateX(-100%);
+    animation: gate-slide 1.5s cubic-bezier(0.23, 1, 0.32, 1) both, gate-glow 2s ease-out both;
+  }
+  
+  .gate-open .gate-right {
+    transform: translateX(100%);
+    animation: gate-slide 1.5s cubic-bezier(0.23, 1, 0.32, 1) both, gate-glow 2s ease-out both;
+  }
+  
+  @keyframes gate-glow {
+    0% { box-shadow: inset 0 0 0 hsl(var(--primary) / 0); }
+    50% { box-shadow: inset 0 0 100px hsl(var(--primary) / 0.3); }
+    100% { box-shadow: inset 0 0 50px hsl(var(--primary) / 0.1); }
+  }
+
+  /* Avatar Cards */
+  .avatar-card {
+    @apply relative overflow-hidden rounded-xl bg-card border border-border cursor-pointer;
+    @apply transition-all duration-500 ease-out;
+    background: var(--gradient-empire);
+    box-shadow: var(--shadow-romantic);
+  }
+  
+  .avatar-card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--glow-avatar), var(--shadow-romantic);
+  }
+  
+  .avatar-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-primary);
+    opacity: 0;
+    transition: var(--transition-romantic);
+    pointer-events: none;
+  }
+  
+  .avatar-card:hover::before {
+    opacity: 0.1;
+  }
+
+  /* Glow Effects */
+  .romantic-glow {
+    filter: drop-shadow(0 0 20px hsl(var(--primary-glow) / 0.6));
+  }
+  
+  .empire-text {
+    background: var(--gradient-secondary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Enhanced Particle Effects */
+  .particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: radial-gradient(circle, hsl(var(--primary-glow)), hsl(var(--primary) / 0.5));
+    border-radius: 50%;
+    pointer-events: none;
+    animation: particle-float 6s ease-in-out infinite, particle-shimmer 3s ease-in-out infinite;
+    opacity: 0.8;
+    box-shadow: 0 0 10px hsl(var(--primary-glow) / 0.6);
+  }
+
+  @keyframes particle-shimmer {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.5); }
+  }
+  
+  @keyframes particle-float {
+    0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.7; }
+    50% { transform: translateY(-30px) rotate(180deg); opacity: 1; }
+  }
+  
+  /* Gate Opening Animation */
+  @keyframes gate-reveal {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+  }
+  
+  .empire-content {
+    animation: gate-reveal 1s ease-out 1.5s both;
+  }
+}
