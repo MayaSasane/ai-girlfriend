@@ -3,7 +3,6 @@ import GateAnimation from '@/components/GateAnimation';
 import AvatarGrid from "@/components/AvatarGrid";
 import PreferencesModal, { PreferenceValues } from '@/components/PreferencesModal';
 import ChatInterface from '@/components/ChatInterface';
-import { Button } from "@/components/ui/button"; // Import the Button component
 
 // Define Avatar type here to be shared across components
 interface Avatar {
@@ -26,19 +25,6 @@ const Index = () => {
   const [selectedAvatar, setSelectedAvatar] = useState<Avatar | null>(null);
   const [showPreferences, setShowPreferences] = useState(false);
   const [chatData, setChatData] = useState<ChatData | null>(null);
-
-   const [apiResponse, setApiResponse] = useState('');
-
-  const testApi = async () => {
-    try {
-      const response = await fetch('/api/hello');
-      const data = await response.json();
-      setApiResponse(JSON.stringify(data, null, 2));
-    } catch (error) {
-      console.error("Failed to fetch from API:", error);
-      setApiResponse("Error fetching from API.");
-    }
-  };
 
   const handleGateComplete = () => {
     setShowGate(false);
@@ -95,13 +81,6 @@ const Index = () => {
         onStartChat={handleStartChat}
       />
 
-       <div className="fixed bottom-4 left-4 bg-zinc-800 p-4 rounded-lg shadow-lg text-white z-50">
-        <h3 className="font-bold mb-2">API Test</h3>
-        <Button onClick={testApi}>Call /api/hello</Button>
-        {apiResponse && (
-          <pre className="mt-2 text-xs bg-black/50 p-2 rounded">{apiResponse}</pre>
-        )}
-      </div>
     </>
   );
 };

@@ -142,28 +142,58 @@ const ChatInterface = ({ avatar, preferences, onBackToHome }: ChatInterfaceProps
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isAiTyping]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputMessage.trim() || !isTrialActive) return;
+
     const userMessage: Message = { id: Date.now().toString(), content: inputMessage, isUser: true };
-    setMessages(prev => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setInputMessage('');
     setIsAiTyping(true);
-    setTimeout(() => {
-      const dominantPref = getDominantPreference(preferences);
-      const responses = {
-        soft: "That's so interesting... please tell me more, darling. 🌸",
-        emotionalSupportive: "I understand. Thank you for sharing that with me. 💙",
-        flirt: "Oh, really? You're making me blush... 😉",
-        dirty: "Mmm, don't stop there. That's turning me on. 🔥",
-      };
-      const aiResponse: Message = {
-        id: (Date.now() + 1).toString(),
-        content: responses[dominantPref] || responses.soft,
-        isUser: false,
-      };
-      setMessages(prev => [...prev, aiResponse]);
+
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          messages: newMessages.map(({ isUser, content }) => ({ role: isUser ? 'user' : 'assistant', content })),
+          avatar, 
+          preferences 
+        }),
+      });
+
+      if (!response.ok || !response.body) {
+        throw new Error('Failed to get a response from the AI.');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let aiResponseContent = '';
+      const aiMessageId = (Date.now() + 1).toString();
+
+      // Add a placeholder for the AI's message
+      setMessages(prev => [...prev, { id: aiMessageId, content: '', isUser: false }]);
+
+      // Read the stream
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        aiResponseContent += decoder.decode(value, { stream: true });
+        
+        // Update the last message in the array with the new content
+        setMessages(prev => prev.map(msg => 
+          msg.id === aiMessageId ? { ...msg, content: aiResponseContent } : msg
+        ));
+      }
+
+    } catch (error) {
+      console.error("Chat API error:", error);
+      toast({ title: "Error", description: "Could not connect to the AI.", variant: "destructive" });
+      // Optionally remove the user's message if the API fails
+      setMessages(prev => prev.filter(msg => msg.id !== userMessage.id));
+    } finally {
       setIsAiTyping(false);
-    }, 1800);
+    }
   };
 
   const formatTime = (seconds: number) => {
