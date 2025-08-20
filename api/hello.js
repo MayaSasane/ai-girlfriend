@@ -1,4 +1,4 @@
-// This is a Node.js serverless function.
+// This is a Node.js serverless function using ES Module syntax.
 // It will be deployed at the URL: /api/hello
 
 export default function handler(request, response) {
@@ -9,4 +9,4 @@ export default function handler(request, response) {
     message: "Hello from the Vercel backend! 👋",
     timestamp: new Date().toISOString(),
   });
-}
+};

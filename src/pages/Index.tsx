@@ -1,30 +1,32 @@
 import { useState } from "react";
 import GateAnimation from '@/components/GateAnimation';
-import AvatarGrid from "@/components/AvatarGrid";
+import AvatarGrid from '@/components/AvatarGrid';
 import PreferencesModal, { PreferenceValues } from '@/components/PreferencesModal';
 import ChatInterface from '@/components/ChatInterface';
+import { Button } from "@/components/ui/button"; // Import the Button component
 
-// Define Avatar type here to be shared across components
+// --- INTERFACES ---
 interface Avatar {
   id: string;
   name: string;
   description: string;
   video?: string;
   color: string;
-  image?: string; // For the chat interface
+  image?: string;
 }
 
-// This will hold the data needed to start a chat session
 interface ChatData {
   avatar: Avatar;
   preferences: PreferenceValues;
 }
 
+// --- MAIN COMPONENT ---
 const Index = () => {
   const [showGate, setShowGate] = useState(true);
   const [selectedAvatar, setSelectedAvatar] = useState<Avatar | null>(null);
   const [showPreferences, setShowPreferences] = useState(false);
   const [chatData, setChatData] = useState<ChatData | null>(null);
+  const [apiResponse, setApiResponse] = useState(''); // State for API test
 
   const handleGateComplete = () => {
     setShowGate(false);
@@ -35,12 +37,11 @@ const Index = () => {
     setShowPreferences(true);
   };
 
-  // Updated to accept the PreferenceValues object from the modal
   const handleStartChat = (preferences: PreferenceValues) => {
     if (selectedAvatar) {
       setChatData({
         avatar: selectedAvatar,
-        preferences, // Store the entire preferences object
+        preferences,
       });
       setShowPreferences(false);
     }
@@ -52,24 +53,36 @@ const Index = () => {
     setShowPreferences(false);
   };
 
-  // 1. Show Gate Animation first
+  // --- New function to test the API ---
+  const testApi = async () => {
+    setApiResponse('Loading...');
+    try {
+      const response = await fetch('/api/hello');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      setApiResponse(JSON.stringify(data, null, 2));
+    } catch (error) {
+      console.error("Failed to fetch from API:", error);
+      setApiResponse(`Error fetching from API: ${error}`);
+    }
+  };
+
   if (showGate) {
     return <GateAnimation onComplete={handleGateComplete} />;
   }
 
-  // 2. If chat data is set, show the Chat Interface
-  console.log(chatData)
   if (chatData) {
     return (
       <ChatInterface
         avatar={chatData.avatar}
-        preferences={chatData.preferences} // Pass the preferences object
+        preferences={chatData.preferences}
         onBackToHome={handleBackToHome}
       />
     );
   }
 
-  // 3. Otherwise, show the Avatar Grid and the (hidden) Preferences Modal
   return (
     <>
       <AvatarGrid onAvatarSelect={handleAvatarSelect} />
@@ -81,6 +94,15 @@ const Index = () => {
         onStartChat={handleStartChat}
       />
 
+      {/* --- Added: Test section for the API --- */}
+      <div className="fixed bottom-4 left-4 bg-zinc-800 p-4 rounded-lg shadow-lg text-white z-50 max-w-sm">
+        <h3 className="font-bold mb-2">API Test Panel</h3>
+        <p className="text-xs text-zinc-400 mb-2">Click to test the Vercel serverless function.</p>
+        <Button onClick={testApi}>Call /api/hello</Button>
+        {apiResponse && (
+          <pre className="mt-2 text-xs bg-black/50 p-2 rounded whitespace-pre-wrap break-all">{apiResponse}</pre>
+        )}
+      </div>
     </>
   );
 };

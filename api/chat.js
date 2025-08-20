@@ -1,24 +1,23 @@
-// Using the 'openai' Node.js library
-const OpenAI = require('openai');
+// Using the 'openai' Node.js library with ES Module syntax
+import OpenAI from 'openai';
+console.log("Loading OpenAI client...");
 
 // Initialize the OpenAI client with your API key from environment variables
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
+console.log("OpenAI client initialized.");
+console.log("API Key:", process.env.OPENAI_API_KEY ? "Loaded" : "Not Loaded");
 
 // This function will be deployed as a serverless function on Vercel
-module.exports = async (request, response) => {
-  // We only want to handle POST requests
+export default async function handler(request, response) {
   if (request.method !== 'POST') {
     return response.status(405).json({ error: 'Method Not Allowed' });
   }
 
   try {
-    // Get the data from the frontend's request
     const { messages, avatar, preferences } = request.body;
-
-    // --- This is the core of your AI's personality ---
-    // We create a detailed system prompt based on the user's choices
+    console.log("Received request body:", request.body);
     const systemPrompt = `You are ${avatar.name}, an AI companion. Your personality is a custom blend defined by the user. 
     Your primary traits are: 
     - Soft & Caring: ${preferences.soft}%
@@ -35,28 +34,24 @@ module.exports = async (request, response) => {
     - Use emojis that match your dominant personality traits.
     - Use the user's message history to provide context-aware and memorable responses.`;
 
-    // Make the API call to OpenAI
     const stream = await openai.chat.completions.create({
-      model: 'gpt-4o', // Or 'gpt-3.5-turbo' for faster, cheaper responses
+      model: 'gpt-4o',
       messages: [
         { role: 'system', content: systemPrompt },
-        ...messages, // The user's message history
+        ...messages,
       ],
-      stream: true, // This is crucial for the typing effect
+      stream: true,
     });
 
-    // Set the response headers to handle the stream
     response.setHeader('Content-Type', 'text/event-stream');
     response.setHeader('Cache-Control', 'no-cache');
     response.setHeader('Connection', 'keep-alive');
 
-    // Pipe the stream from OpenAI directly to the client
     for await (const chunk of stream) {
       const content = chunk.choices[0]?.delta?.content || '';
       response.write(content);
     }
     
-    // End the response when the stream is finished
     response.end();
 
   } catch (error) {
