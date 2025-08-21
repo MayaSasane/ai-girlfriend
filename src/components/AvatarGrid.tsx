@@ -1,12 +1,17 @@
 import AvatarCard from "./AvatarCard";
 import { Plus } from "lucide-react";
+import { useState, useEffect } from "react";
 
 interface Avatar {
   id: string;
   name: string;
   description: string;
+  image?: string; // Optional image for avatars without video
   video?: string;
   color: string;
+  avatarId?: string; // Optional ID for Heygen avatar
+  avatarName?: string; // Optional name for Heygen avatar
+  ethnicity: string; // New property
 }
 
 interface AvatarGridProps {
@@ -32,6 +37,37 @@ const CreateNewCard = () => (
   </div>
 );
 
+// --- NEW: Live User Count Component ---
+const LiveUserCount = () => {
+  // Initialize with a realistic base number plus some randomness
+  const [count, setCount] = useState(Math.floor(Math.random() * 200) + 1234);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Simulate fluctuation by adding a small random number (-2 to +2)
+      const fluctuation = Math.floor(Math.random() * 5) - 2;
+      setCount(prevCount => prevCount + fluctuation);
+    }, 2500); // Update every 2.5 seconds
+
+    // Clean up the interval when the component unmounts to prevent memory leaks
+    return () => clearInterval(interval);
+  }, []); // Empty dependency array ensures this effect runs only once
+
+  return (
+    <div className="flex items-center justify-center gap-2 mt-6">
+      {/* Pulsating green dot for "live" effect */}
+      <span className="relative flex h-3 w-3">
+        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+        <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+      </span>
+      <p className="text-md text-zinc-300">
+        <span className="font-bold text-white">{count.toLocaleString()}</span> users online now
+      </p>
+    </div>
+  );
+};
+
+
 const AvatarGrid = ({ onAvatarSelect }: AvatarGridProps) => {
   const avatars: Avatar[] = [
     {
@@ -39,49 +75,60 @@ const AvatarGrid = ({ onAvatarSelect }: AvatarGridProps) => {
       name: "Pamela",
       description: "Seductive & Confident",
       video: "/pamela-video.mp4",
+      image: "/pamela.png",
       color: "from-red-500 to-pink-500",
+      avatarId: "Katya_ProfessionalLook2_public", 
+      avatarName: "Pamela",
+      ethnicity: "American",
     },
     {
       id: "angela",
       name: "Angela",
       description: "Sweet & Caring",
       color: "from-blue-400 to-purple-400",
+      ethnicity: "European",
     },
     {
       id: "stella",
       name: "Stella",
       description: "Mysterious & Elegant",
       color: "from-purple-500 to-indigo-500",
+      ethnicity: "Latina",
     },
-  {
+    {
       id: "leyla",
       name: "Leyla",
       description: "Exotic & Passionate",
       color: "from-orange-500 to-red-500",
+      ethnicity: "Latina",
     },
     {
       id: "sakura",
       name: "Sakura",
       description: "Gentle & Traditional",
       color: "from-pink-400 to-rose-400",
+      ethnicity: "Asian",
     },
     {
       id: "ivana",
       name: "Ivana",
       description: "Bold & Adventurous",
       color: "from-yellow-500 to-amber-500",
+      ethnicity: "African",
     },
     {
       id: "claire",
       name: "Claire",
       description: "Intellectual & Witty",
       color: "from-cyan-500 to-blue-500",
+      ethnicity: "American",
     },
     {
       id: "katie",
       name: "Katie",
       description: "Playful & Fun",
       color: "from-green-500 to-teal-500",
+      ethnicity: "European",
     },
   ];
 
@@ -100,6 +147,10 @@ const AvatarGrid = ({ onAvatarSelect }: AvatarGridProps) => {
           <p className="text-lg text-zinc-400">
             Meet our exclusive collection of AI companions, or create your own.
           </p>
+          
+          {/* --- ADDED: Live user count is displayed here --- */}
+          <LiveUserCount />
+
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {avatars.map((avatar) => (

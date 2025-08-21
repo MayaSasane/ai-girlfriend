@@ -10,9 +10,12 @@ interface Avatar {
   id: string;
   name: string;
   description: string;
+  image?: string;
   video?: string;
   color: string;
-  image?: string;
+  avatarId?: string; // ✅ Set to optional
+  avatarName?: string; // ✅ Set to optional
+  ethnicity?: string; // ✅ Set to optional to avoid future errors
 }
 
 interface ChatData {
@@ -93,16 +96,6 @@ const Index = () => {
         avatar={selectedAvatar}
         onStartChat={handleStartChat}
       />
-
-      {/* --- Added: Test section for the API --- */}
-      <div className="fixed bottom-4 left-4 bg-zinc-800 p-4 rounded-lg shadow-lg text-white z-50 max-w-sm">
-        <h3 className="font-bold mb-2">API Test Panel</h3>
-        <p className="text-xs text-zinc-400 mb-2">Click to test the Vercel serverless function.</p>
-        <Button onClick={testApi}>Call /api/hello</Button>
-        {apiResponse && (
-          <pre className="mt-2 text-xs bg-black/50 p-2 rounded whitespace-pre-wrap break-all">{apiResponse}</pre>
-        )}
-      </div>
     </>
   );
 };
