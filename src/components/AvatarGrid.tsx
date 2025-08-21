@@ -24,7 +24,6 @@ const CreateNewCard = () => (
                  bg-zinc-900 border-2 border-dashed border-zinc-700 
                  flex flex-col items-center justify-center text-center p-6 
                  transition-all duration-500 hover:scale-105 hover:border-primary
-                 // --- Added: Matching glow effect on hover ---
                  hover:shadow-[0_0_25px_5px_rgba(239,68,68,0.4)]">
     <div className="absolute inset-0 z-0 bg-gradient-radial from-primary/10 via-zinc-900 to-zinc-900"></div>
     <div className="relative z-10 flex flex-col items-center justify-center">
@@ -33,6 +32,14 @@ const CreateNewCard = () => (
       </div>
       <h3 className="text-2xl font-bold text-white">Create Your Own</h3>
       <p className="text-sm text-zinc-400">Bring your perfect girlfriend to life.</p>
+      
+    
+      <div className="mt-4 px-3 py-1 bg-primary/20 border border-primary/30 rounded-full">
+        <p className="text-xs font-semibold text-primary">
+          One time payment 99.99 € per avatar
+        </p>
+      </div>
+
     </div>
   </div>
 );
@@ -69,7 +76,7 @@ const LiveUserCount = () => {
 
 
 const AvatarGrid = ({ onAvatarSelect }: AvatarGridProps) => {
-  const avatars: Avatar[] = [
+const avatars: Avatar[] = [
     {
       id: "pamela",
       name: "Pamela",
@@ -77,30 +84,30 @@ const AvatarGrid = ({ onAvatarSelect }: AvatarGridProps) => {
       video: "/pamela-video.mp4",
       image: "/pamela.png",
       color: "from-red-500 to-pink-500",
-      avatarId: "Katya_ProfessionalLook2_public", 
+      avatarId: "Katya_Chair_Sitting_public", 
       avatarName: "Pamela",
-      ethnicity: "American",
+      ethnicity: "European",
     },
     {
       id: "angela",
       name: "Angela",
       description: "Sweet & Caring",
       color: "from-blue-400 to-purple-400",
-      ethnicity: "European",
+      ethnicity: "Latina",
     },
     {
       id: "stella",
       name: "Stella",
       description: "Mysterious & Elegant",
       color: "from-purple-500 to-indigo-500",
-      ethnicity: "Latina",
+      ethnicity: "Italian",
     },
     {
       id: "leyla",
       name: "Leyla",
       description: "Exotic & Passionate",
       color: "from-orange-500 to-red-500",
-      ethnicity: "Latina",
+      ethnicity: "African",
     },
     {
       id: "sakura",
@@ -114,21 +121,21 @@ const AvatarGrid = ({ onAvatarSelect }: AvatarGridProps) => {
       name: "Ivana",
       description: "Bold & Adventurous",
       color: "from-yellow-500 to-amber-500",
-      ethnicity: "African",
+      ethnicity: "Russian",
     },
     {
       id: "claire",
       name: "Claire",
       description: "Intellectual & Witty",
       color: "from-cyan-500 to-blue-500",
-      ethnicity: "American",
+      ethnicity: "French",
     },
     {
       id: "katie",
       name: "Katie",
       description: "Playful & Fun",
       color: "from-green-500 to-teal-500",
-      ethnicity: "European",
+      ethnicity: "American",
     },
   ];
 
@@ -141,6 +148,10 @@ const AvatarGrid = ({ onAvatarSelect }: AvatarGridProps) => {
       
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="text-center mb-12">
+         {/* ✅ --- ADDED BRAND TITLE --- */}
+          <h1 className="text-5xl font-semibold text-primary/80 tracking-widest mb-2 animate-fade-in-slow">
+            MyGirl.Ai
+          </h1>
           <h1 className="text-5xl font-extrabold mb-4 text-white drop-shadow-lg">
             Choose Your <span className="text-primary">Girlfriend</span>
           </h1>
